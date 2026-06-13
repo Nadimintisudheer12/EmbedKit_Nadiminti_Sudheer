@@ -29,12 +29,14 @@ typedef struct
 
 } Parser;
 
+
 void reset_parser(Parser *p)
 {
     p->state = WAIT_SOF;
     p->index = 0;
     p->checksum = 0;
 }
+
 
 void init_parser(Parser *p, uint32_t timeout_ms)
 {
@@ -46,7 +48,7 @@ void init_parser(Parser *p, uint32_t timeout_ms)
 
 int feed_byte(Parser *p, uint8_t byte, uint32_t time)
 {
-    /* Timeout check FIRST */
+    
     if ((p->timeout != 0U) &&
         (p->state != WAIT_SOF))
     {
@@ -143,8 +145,6 @@ int feed_byte(Parser *p, uint8_t byte, uint32_t time)
     return 0;
 }
 
-
-/* Print frame contents */
 void print_frame(Parser *p)
 {
     uint8_t i;
@@ -166,8 +166,6 @@ void print_frame(Parser *p)
     printf("]\n");
 }
 
-
-/* Feed array of bytes */
 void feed_stream(Parser *p,
                  uint8_t bytes[],
                  uint32_t times[],
@@ -215,7 +213,6 @@ int main(void)
 {
     Parser parser;
 
-
     printf("\nTEST 1 : Valid Frame\n");
 
     init_parser(&parser, 50);
@@ -232,11 +229,9 @@ int main(void)
 
     feed_stream(&parser, bytes1, times1, 7);
 
-
     printf("\nTEST 2 : Timeout Recovery\n");
 
     init_parser(&parser, 50);
-
 
     uint8_t bytes2[] =
     {
@@ -267,6 +262,7 @@ int main(void)
     };
 
     feed_stream(&parser, bytes2, times2, 9);
+
 
     printf("\nTEST 3 : Back-to-Back Frames\n");
 
@@ -308,6 +304,7 @@ int main(void)
     };
 
     feed_stream(&parser, bytes3, times3, 11);
+
 
     printf("\nTEST 4 : Timeout Disabled\n");
 
