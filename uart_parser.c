@@ -29,8 +29,6 @@ typedef struct
 
 } Parser;
 
-
-/* Reset parser */
 void reset_parser(Parser *p)
 {
     p->state = WAIT_SOF;
@@ -38,8 +36,6 @@ void reset_parser(Parser *p)
     p->checksum = 0;
 }
 
-
-/* Initialize parser */
 void init_parser(Parser *p, uint32_t timeout_ms)
 {
     p->timeout = timeout_ms;
@@ -48,8 +44,6 @@ void init_parser(Parser *p, uint32_t timeout_ms)
     reset_parser(p);
 }
 
-
-/* Feed one byte */
 int feed_byte(Parser *p, uint8_t byte, uint32_t time)
 {
     /* Timeout check FIRST */
@@ -222,8 +216,6 @@ int main(void)
     Parser parser;
 
 
-    /* ================= TEST 1 ================= */
-
     printf("\nTEST 1 : Valid Frame\n");
 
     init_parser(&parser, 50);
@@ -241,13 +233,10 @@ int main(void)
     feed_stream(&parser, bytes1, times1, 7);
 
 
-    /* ================= TEST 2 ================= */
-
     printf("\nTEST 2 : Timeout Recovery\n");
 
     init_parser(&parser, 50);
 
-    /* checksum = 05 ^ 01 ^ 7F = 7B */
 
     uint8_t bytes2[] =
     {
@@ -278,9 +267,6 @@ int main(void)
     };
 
     feed_stream(&parser, bytes2, times2, 9);
-
-
-    /* ================= TEST 3 ================= */
 
     printf("\nTEST 3 : Back-to-Back Frames\n");
 
@@ -322,9 +308,6 @@ int main(void)
     };
 
     feed_stream(&parser, bytes3, times3, 11);
-
-
-    /* ================= TEST 4 ================= */
 
     printf("\nTEST 4 : Timeout Disabled\n");
 
